@@ -2,7 +2,7 @@
 
 ## By:
 - Danilo Medeiros | 20190020350
-- Rayque Alencar |
+- Rayque Alencar | 20200015109
 
 ## Getting Started
 
