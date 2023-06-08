@@ -1,7 +1,8 @@
 # Final Project OR
-By:
-Danilo Medeiros | 20190020350
-Rayque Alencar |
+
+## By:
+- Danilo Medeiros | 20190020350
+- Rayque Alencar |
 
 ## Getting Started
 
