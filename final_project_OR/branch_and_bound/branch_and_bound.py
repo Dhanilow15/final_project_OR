@@ -7,7 +7,7 @@ def model_problem():
     # setting problem info object
     optm_problem = read_problem_example_file(file_name='problem_example_1')
 
-    # modeling the problem
+    # modeling.py the problem
     optm_model = Model(sense=MAXIMIZE, solver_name=CBC)
 
     # creating vars dictionary
