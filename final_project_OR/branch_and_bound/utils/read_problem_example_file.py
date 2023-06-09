@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from collections import OrderedDict
 
+import os
+
 
 @dataclass
 class OptmProblem:
@@ -9,6 +11,26 @@ class OptmProblem:
     obj_function: list
     restrictions: dict
 
+
+def get_path_to_data_folder():
+    """
+    This method returns the path to the data folder
+    Returns:
+        script_dir (str): path string
+    """
+    # get the path to the directory of the current script
+    script_path = os.path.abspath(__file__)
+    script_dir = os.path.dirname(script_path)
+    print(script_dir)
+    print(script_path)
+    # navigate up the directory hierarchy until the root of the project is reached
+    while not os.path.exists(os.path.join(script_dir, "main.py")):
+        script_dir = os.path.dirname(script_dir)
+
+    # entering data folder
+    script_dir += "/data"
+
+    return script_dir
 
 def read_problem_example_file(file_name: str) -> OptmProblem:
     """
@@ -19,7 +41,7 @@ def read_problem_example_file(file_name: str) -> OptmProblem:
         (OptmProblem): OptimizationProblem object filled with .txt file data
     """
     # reading file
-    with open(f'../data/{file_name}.txt', 'r') as file:
+    with open(f'{get_path_to_data_folder()}{file_name}.txt', 'r') as file:
         lines = file.readlines()
 
     # useful info
@@ -47,4 +69,13 @@ def read_problem_example_file(file_name: str) -> OptmProblem:
 
 
 if __name__ == "__main__":
+    # Get the path to the directory containing the current script
     read_problem_example_file(file_name='problem_example_1')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Get the root folder by going up one level repeatedly until reaching the topmost directory
+    # root_folder = current_dir
+    # while os.path.dirname(root_folder) != root_folder:
+    #     root_folder = os.path.dirname(root_folder)
+    #
+    # print("Root folder:", root_folder)
