@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from collections import OrderedDict
 
 
 @dataclass
@@ -24,7 +25,7 @@ def read_problem_example_file(file_name: str) -> OptmProblem:
     # useful info
     num_vars = 0
     num_restrictions = 0
-    restrictions = {}
+    restrictions = OrderedDict()
     obj_function = []
 
     # getting useful info
