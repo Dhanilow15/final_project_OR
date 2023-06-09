@@ -21,8 +21,6 @@ def get_path_to_data_folder():
     # get the path to the directory of the current script
     script_path = os.path.abspath(__file__)
     script_dir = os.path.dirname(script_path)
-    print(script_dir)
-    print(script_path)
     # navigate up the directory hierarchy until the root of the project is reached
     while not os.path.exists(os.path.join(script_dir, "main.py")):
         script_dir = os.path.dirname(script_dir)
@@ -31,6 +29,7 @@ def get_path_to_data_folder():
     script_dir += "/data"
 
     return script_dir
+
 
 def read_problem_example_file(file_name: str) -> OptmProblem:
     """
@@ -41,7 +40,7 @@ def read_problem_example_file(file_name: str) -> OptmProblem:
         (OptmProblem): OptimizationProblem object filled with .txt file data
     """
     # reading file
-    with open(f'{get_path_to_data_folder()}{file_name}.txt', 'r') as file:
+    with open(f'{get_path_to_data_folder()}/{file_name}.txt', 'r') as file:
         lines = file.readlines()
 
     # useful info
