@@ -1,4 +1,4 @@
-from mip import *
+from mip import Model, MAXIMIZE, CBC, xsum, CONTINUOUS
 
 from final_project_OR.branch_and_bound.utils.read_problem_example_file import OptmProblem
 from final_project_OR.branch_and_bound.utils.read_problem_example_file import read_problem_example_file
@@ -20,16 +20,19 @@ class OptmModel:
         # modeling.py the problem
         optm_model = Model(sense=MAXIMIZE, solver_name=CBC)
 
-        # creating vars dictionary
+        # creating vars dictionary, with linear relaxation
         x = {i + 1: optm_model.add_var(var_type=CONTINUOUS, name=f"x_{i + 1}", lb=0)
              for i in range(self.problem.num_vars)}
+
+        # creating target function
+        optm_model.objective = xsum(c*x[index+1] for index, c in enumerate(self.problem.obj_function))
 
         # creating restrictions
         for coefficients in self.problem.restrictions.values():
             optm_model += xsum(c * x[index + 1] for index, c in enumerate(coefficients[:-1])) <= coefficients[-1]
 
         optm_model.write(f"model_{self.file_name}.lp")  # saves model on archive
-        # with open(f"model_{file_name}.lp", "r") as f:  # reads and exhibit model
+        # with open(f"model_{self.file_name}.lp", "r") as f:  # reads and exhibit model
         #     print(f.read())
 
         return optm_model
