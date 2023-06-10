@@ -22,7 +22,7 @@ class OptmModel:
         optm_model = Model(sense=MAXIMIZE, solver_name=CBC)
 
         # creating vars dictionary, with linear relaxation
-        self.vars = {i + 1: optm_model.add_var(var_type=CONTINUOUS, name=f"x_{i + 1}", lb=0)
+        self.vars = {i + 1: optm_model.add_var(var_type=CONTINUOUS, name=f"x_{i + 1}", lb=0, ub=1)
              for i in range(self.problem.num_vars)}
 
         # creating target function
