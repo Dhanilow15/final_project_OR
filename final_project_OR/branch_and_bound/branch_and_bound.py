@@ -1,10 +1,10 @@
-from mip import *
+import copy
 
-from final_project_OR.branch_and_bound.preprocessing.modeling import OptmModel
+from mip import Model, OptimizationStatus, Var
 
 
-class BranchAndBound():
-    def __init__(self, initial_model: Model, initial_vars: mip.Var):
+class BranchAndBound:
+    def __init__(self, initial_model: Model, initial_vars: Var):
         # saving initial problem info, without screen printing
         self.initial_model = initial_model
         self.initial_model.verbose = False
@@ -12,7 +12,19 @@ class BranchAndBound():
         self.initial_solution = self.initial_model.optimize()
         self.primal_limit = 0
 
-    def filter_feasibility(self, solution_satus: OptimizationStatus) -> bool:
+    @staticmethod
+    def get_border_integers_for_float(value: float) -> list[int]:
+        """
+        Returns a list with border integers for a float number
+        Args:
+            value (float): float valuee
+        Returns:
+             (list[int]): list with the first integer number before and after a value.
+        """
+        return [int(value), int(value) + 1]
+
+    @staticmethod
+    def filter_feasibility(solution_satus: OptimizationStatus) -> bool:
         """
         Feasibility filter for branch and bound
         Args:
@@ -20,17 +32,18 @@ class BranchAndBound():
         Returns:
             (bool): True if solution is feasible, otherwise False
         """
-        return not solution_satus.INFEASIBLE
+        return solution_satus == OptimizationStatus.INFEASIBLE
 
-    def filter_integrality(self, solution_vars: list[float]) -> bool:
+    @staticmethod
+    def filter_integrality(solution_vars: list[float]) -> list:
         """
         Integrality filter for branch and bound
         Args:
             solution_vars (list[float]): list with the var values for a model solution
         Returns:
-            (bool): True is every variable is a whole number, otherwise False
+            (list): Empty list if every variable is a whole number, otherwise returns a list with the deciamal indexes
         """
-        return all(var.is_integer() for var in solution_vars)
+        return [index + 1 for index, var in enumerate(solution_vars) if not var.is_integer()]
 
     def filter_inferior_solution(self, solution_value: float) -> bool:
         """
@@ -38,18 +51,36 @@ class BranchAndBound():
         Args:
             solution_value (float): solution value of a model
         Returns:
-            (bool): True if solution is greater than primal limit, otherwise False
+            (bool): True if solution is lesser than primal limit, otherwise False
         """
-        return solution_value > self.primal_limit
+        return solution_value < self.primal_limit
 
-    def execute_branch_and_bound(self):
-        pass
+    def execute_branch_and_bound(self, start_model: Model):
+        if start_model != self.initial_model:
+            solution = start_model.optimize()
+            # checking feasibility
+            if self.filter_feasibility(solution_satus=solution):
+                return
 
-if __name__ == '__main__':
-    my_model = OptmModel(file_name='problem_example_1')
-    my_bb = BranchAndBound(initial_model=my_model.model_problem(), initial_vars=my_model.vars)
-    print('-----------------')
-    print(my_bb.initial_solution)
-    print(my_bb.initial_model.objective_value)
-    for v in range(len(my_bb.vars)):
-        print(my_bb.vars[v+1].x)
+        # getting solution vars for this iteration
+        solution_vars = [self.vars[i + 1].x for i in range(len(self.vars))]
+        # checking if all variables are integers
+        decimal_vars = self.filter_integrality(solution_vars=solution_vars)
+
+        # checking solution value
+        if self.filter_inferior_solution(solution_value=start_model.objective_value) and not decimal_vars:
+            return
+        else:
+            self.primal_limit = start_model.objective_value
+
+        # searching in depth
+        for var in decimal_vars:
+            # getting the integer border numbers for this variable value
+            border_integers = self.get_border_integers_for_float(solution_vars[var-1])
+            # branching and bounding
+            for index, integer in enumerate(border_integers):
+                relaxated_model = copy.copy(start_model)
+                # >= for integer after, and <= for integer before
+                relaxated_model += self.vars[var] >= integer if index else self.vars[var] <= integer
+                # recursive call
+                self.execute_branch_and_bound(start_model=relaxated_model)
