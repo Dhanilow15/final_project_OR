@@ -70,7 +70,8 @@ class BranchAndBound:
         # checking solution value
         if self.filter_inferior_solution(solution_value=start_model.objective_value) and not decimal_vars:
             return
-        else:
+        # setting new primal limit
+        elif not decimal_vars:
             self.primal_limit = start_model.objective_value
 
         # searching in depth
@@ -80,7 +81,11 @@ class BranchAndBound:
             # branching and bounding
             for index, integer in enumerate(border_integers):
                 relaxated_model = copy.copy(start_model)
-                # >= for integer after, and <= for integer before
-                relaxated_model += self.vars[var] >= integer if index else self.vars[var] <= integer
+                # restriction to be lesser than bottom limit
+                if index:
+                    relaxated_model += self.vars[var] >= integer
+                # greater than upper limit
+                else:
+                    relaxated_model += self.vars[var] <= integer
                 # recursive call
                 self.execute_branch_and_bound(start_model=relaxated_model)
