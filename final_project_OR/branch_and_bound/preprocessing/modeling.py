@@ -31,8 +31,8 @@ class OptmModel:
 
         # creating restrictions
         for coefficients in self.problem.restrictions.values():
-            optm_model += xsum(c * self.vars[index + 1] for index, c in enumerate(coefficients[:-1])) <= coefficients[
-                -1]
+            optm_model += xsum(c * self.vars[index + 1] for index, c in enumerate(coefficients[:-1])) <= \
+                          coefficients[-1]
 
         optm_model.write(f"model_{self.file_name}.lp")  # saves model on archive
         # with open(f"model_{self.file_name}.lp", "r") as f:  # reads and exhibit model
