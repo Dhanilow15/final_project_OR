@@ -3,6 +3,11 @@ from final_project_OR.branch_and_bound.preprocessing.modeling import OptmModel
 
 
 def solve_problem(file_name: str):
+    """
+    Solves problems in data folder with branch and bound and prints a message with Optimal solution value.
+    Args:
+        file_name (str): problem file name
+    """
     solve_model = OptmModel(file_name=file_name)
     solve_bb = BranchAndBound(initial_model=solve_model.model_problem(),
                               initial_vars=solve_model.vars,
