@@ -13,5 +13,5 @@ def solve_problem(file_name: str):
 
 
 if __name__ == '__main__':
-    for i in range(1,5):
+    for i in range(1, 5):
         solve_problem(file_name=f'problem_example_{i}')

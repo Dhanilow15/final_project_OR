@@ -57,6 +57,13 @@ class BranchAndBound:
         return solution_value < self.primal_limit
 
     def execute_branch_and_bound(self, start_model: Model, n_restrs: int):
+        """
+        This method executes branch and bound recursively for a python mip optimization model, after its completion, the
+        primal limit variable is set as the optimal solution
+        Args:
+            start_model (Model): Initial model to be solved
+            n_restrs (int): number of restrictions in this model
+        """
         # solving
         if start_model != self.initial_model:
             solution = start_model.optimize()
