@@ -19,7 +19,7 @@ class OptmModel:
             optm_model (Model): python mip model of predefined optimization problem
         """
 
-        # modeling.py the problem
+        # modeling the problem
         optm_model = Model(sense=MAXIMIZE, solver_name=CBC)
 
         # creating vars dictionary, with linear relaxation
