@@ -57,8 +57,8 @@ def read_problem_example_file(file_name: str) -> OptmProblem:
         # second line, sets objective function coefficients
         elif index == 1:
             obj_function = [int(value) for value in line.split() if value.isdigit()]
+        # third line on, adds restrictions
         else:
-            # third line on, adds restrictions
             restrictions[index - 1] = [int(value) for value in line.split() if value.isdigit()]
 
     return OptmProblem(num_vars=num_vars,
