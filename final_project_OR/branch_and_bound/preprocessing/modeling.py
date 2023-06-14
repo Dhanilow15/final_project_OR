@@ -27,7 +27,8 @@ class OptmModel:
                      for i in range(self.problem.num_vars)}
 
         # creating target function
-        optm_model.objective = xsum(coefficient * self.vars[index + 1] for index, coefficient in enumerate(self.problem.obj_function))
+        optm_model.objective = xsum(coefficient * self.vars[index + 1] for index, coefficient in
+                                    enumerate(self.problem.obj_function))
 
         # creating restrictions
         for coefficients in self.problem.restrictions.values():
