@@ -16,5 +16,6 @@ fi
 
 # Install the libraries from requirements.txt
 pip install -r requirements.txt
+pip install .
 
 echo "Dependencies installation completed."
