@@ -67,14 +67,7 @@ def read_problem_example_file(file_name: str) -> OptmProblem:
                        restrictions=restrictions)
 
 
-if __name__ == "__main__":
-    # Get the path to the directory containing the current script
-    read_problem_example_file(file_name='problem_example_1')
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-
-    # Get the root folder by going up one level repeatedly until reaching the topmost directory
-    # root_folder = current_dir
-    # while os.path.dirname(root_folder) != root_folder:
-    #     root_folder = os.path.dirname(root_folder)
-    #
-    # print("Root folder:", root_folder)
+# if __name__ == "__main__":
+#     # Get the path to the directory containing the current script
+#     read_problem_example_file(file_name='problem_example_1')
+#     current_dir = os.path.dirname(os.path.abspath(__file__))
