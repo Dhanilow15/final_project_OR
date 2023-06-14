@@ -10,7 +10,7 @@ if [[ -n "$VIRTUAL_ENV" ]]; then
     echo "Using existing virtual environment: $VIRTUAL_ENV"
 else
     echo "No virtual environment found. Creating a new one..."
-    python3 -m venv myenv
+    python3.11 -m venv myenv
     source myenv/bin/activate
 fi
 
